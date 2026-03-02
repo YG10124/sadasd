@@ -10,7 +10,8 @@ const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/sadasd/",
+  // Use a relative base so GitHub Pages works regardless of repo/project path.
+  base: "./",
   plugins: [react(), tailwindcss(), viteSingleFile()],
   resolve: {
     alias: {

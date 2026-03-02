@@ -13,20 +13,20 @@ export default function Portfolio() {
   const projects = [
     {
       id: 1,
-      title: 'Quadratic Equations Research Paper',
-      description: 'A deep dive into quadratic equations and their real-world applications in physics and engineering.',
-      subject: 'Math',
+      title: 'Kinematics Lab Report',
+      description: 'A deep dive into velocity, acceleration, and motion modeling from lab observations.',
+      subject: 'Physics',
       status: 'In Progress',
       statusColor: '#D97706',
       statusIcon: Clock,
       lastUpdated: '2 days ago',
-      goals: ['Understand factoring methods', 'Apply to real-world scenarios', 'Present findings'],
+      goals: ['Model motion with equations', 'Interpret velocity-time graphs', 'Present findings'],
       artifacts: [
         { name: 'Draft Paper.pdf', type: 'pdf', size: '1.2 MB' },
         { name: 'Research Notes.docx', type: 'doc', size: '340 KB' },
         { name: 'Graphs.png', type: 'image', size: '890 KB' },
       ],
-      reflection: 'I\'ve learned that quadratic equations are much more practical than I thought. The connection to projectile motion was eye-opening.',
+      reflection: 'I learned that interpreting graphs and experimental data is essential for understanding real motion systems.',
       feedback: [
         { author: 'Dr. Chen', text: 'Great progress! Consider adding a section on the discriminant.', time: '1 day ago' },
       ],
@@ -58,21 +58,21 @@ export default function Portfolio() {
     },
     {
       id: 3,
-      title: 'Creative Short Story Collection',
-      description: 'A collection of three short stories exploring themes of identity and belonging.',
-      subject: 'English',
+      title: 'Astrobiology Research Brief',
+      description: 'A short research brief exploring habitable zones, extremophiles, and biosignatures.',
+      subject: 'Biology',
       status: 'Featured',
       statusColor: '#059669',
       statusIcon: Star,
       lastUpdated: '3 days ago',
-      goals: ['Write 3 complete stories', 'Develop unique characters', 'Use literary devices'],
+      goals: ['Compare habitability models', 'Summarize current evidence', 'Build a visual brief'],
       artifacts: [
         { name: 'Story 1 - New Dawn.pdf', type: 'pdf', size: '120 KB' },
         { name: 'Story 2 - Echoes.pdf', type: 'pdf', size: '95 KB' },
         { name: 'Story 3 - Crossroads.pdf', type: 'pdf', size: '140 KB' },
         { name: 'Author Notes.docx', type: 'doc', size: '45 KB' },
       ],
-      reflection: 'Writing these stories taught me about character development and pacing. "Crossroads" was the most challenging but also the most rewarding.',
+      reflection: 'This project helped me connect microbiology with planetary science and evaluate evidence critically.',
       feedback: [
         { author: 'Ms. Woods', text: 'Outstanding work! Your use of metaphor in "Echoes" is particularly strong.', time: '2 days ago' },
       ],
@@ -81,14 +81,14 @@ export default function Portfolio() {
     },
     {
       id: 4,
-      title: 'WWII Primary Source Analysis',
-      description: 'Analysis of primary documents from World War II with historical context and interpretive essays.',
-      subject: 'History',
+      title: 'Climate Systems Data Analysis',
+      description: 'Analysis of atmospheric and ocean datasets with explanatory charts and interpretations.',
+      subject: 'Earth Science',
       status: 'In Progress',
       statusColor: '#D97706',
       statusIcon: Clock,
       lastUpdated: '1 day ago',
-      goals: ['Analyze 5 primary sources', 'Write contextual essays', 'Create timeline'],
+      goals: ['Analyze 5 climate datasets', 'Write evidence-based summaries', 'Create trend timeline'],
       artifacts: [
         { name: 'Source Analysis 1.pdf', type: 'pdf', size: '200 KB' },
         { name: 'Source Analysis 2.pdf', type: 'pdf', size: '185 KB' },
@@ -114,7 +114,7 @@ export default function Portfolio() {
     const StatusIcon = project.statusIcon;
 
     return (
-      <div className="space-y-6">
+      <div className="portfolio-page space-y-6">
         <button
           onClick={() => setSelectedProject(null)}
           className="inline-flex items-center gap-2 text-sm text-[#1D4ED8] font-medium min-h-[44px] underline"
@@ -246,7 +246,7 @@ export default function Portfolio() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="portfolio-page space-y-6">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>

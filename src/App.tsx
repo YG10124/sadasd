@@ -54,9 +54,20 @@ export default function App() {
       case 'dashboard':
         return <Dashboard onNavigate={setCurrentPage} />;
       case 'schedule':
-        return <SchedulePage />;
+        return (
+          <SchedulePage
+            searchQuery={searchQuery}
+            isSignedIn={isSignedIn}
+            onNavigate={setCurrentPage}
+          />
+        );
       case 'resources':
-        return <ResourcesPage />;
+        return (
+          <ResourcesPage
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+        );
       case 'community':
         return <CommunityPage />;
       case 'portfolio':
@@ -81,6 +92,7 @@ export default function App() {
 
   const sidebarDesktopWidth = isSignedIn ? (sidebarExpanded ? 240 : 68) : 0;
   const isAuthFullscreen = needsAuth || currentPage === 'auth';
+  const isUnsignedHome = !isSignedIn && currentPage === 'home';
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg)' }}>
@@ -95,20 +107,22 @@ export default function App() {
             setSidebarExpanded={setSidebarExpanded}
             isSignedIn={isSignedIn}
           />
-          <TopBar
-            currentPage={currentPage}
-            onNavigate={setCurrentPage}
-            onOpenSidebar={() => setSidebarOpen(true)}
-            isSignedIn={isSignedIn}
-            sidebarExpanded={sidebarExpanded}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-          />
+          {!isUnsignedHome && (
+            <TopBar
+              currentPage={currentPage}
+              onNavigate={setCurrentPage}
+              onOpenSidebar={() => setSidebarOpen(true)}
+              isSignedIn={isSignedIn}
+              sidebarExpanded={sidebarExpanded}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+            />
+          )}
         </>
       )}
 
       <main
-        className={isAuthFullscreen ? '' : 'pt-14 pb-20 lg:pb-6 min-h-screen transition-all duration-300'}
+        className={isAuthFullscreen ? '' : `${isUnsignedHome ? 'pb-20 lg:pb-6' : 'pt-14 pb-20 lg:pb-6'} min-h-screen transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]`}
         style={{ marginLeft: (!isAuthFullscreen && isDesktop) ? sidebarDesktopWidth : 0 }}
       >
         {isAuthFullscreen ? (

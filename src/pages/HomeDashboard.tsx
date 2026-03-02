@@ -9,7 +9,8 @@ interface HomeDashboardProps {
 }
 
 export default function HomeDashboard({ onNavigate }: HomeDashboardProps) {
-  const { streak } = useLocalStore();
+  const { streak, currentUser } = useLocalStore();
+  const firstName = (currentUser.displayName || currentUser.username || 'Scientist').split(' ')[0];
 
   return (
     <div className="space-y-6 lg:space-y-8">
@@ -18,7 +19,7 @@ export default function HomeDashboard({ onNavigate }: HomeDashboardProps) {
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
         <div className="absolute bottom-0 left-1/2 w-48 h-48 bg-white/5 rounded-full translate-y-1/2" />
         <div className="relative">
-          <p className="text-blue-100 text-sm font-medium">Good morning, Jane</p>
+          <p className="text-blue-100 text-sm font-medium">Good morning, {firstName}</p>
           <h1 className="text-2xl lg:text-3xl font-bold font-[family-name:var(--font-display)] mt-1">Ready to learn something new?</h1>
           <p className="text-blue-100 mt-2 max-w-lg text-sm lg:text-base">
             You have 2 sessions today and 3 resources to review. Keep your {streak.count}-day streak going!
@@ -54,7 +55,7 @@ export default function HomeDashboard({ onNavigate }: HomeDashboardProps) {
             <Play size={20} style={{ color: 'var(--brand)' }} />
           </div>
           <h3 className="font-semibold text-sm" style={{ color: 'var(--text)' }}>Next Live Session</h3>
-          <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>Algebra Basics — in 45 min</p>
+          <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>Physics Lab — in 45 min</p>
           <div className="flex items-center gap-1 mt-2 text-xs font-medium" style={{ color: 'var(--brand)' }}>
             Join session <ChevronRight size={14} />
           </div>
@@ -145,10 +146,10 @@ export default function HomeDashboard({ onNavigate }: HomeDashboardProps) {
           </div>
           <div className="space-y-3">
             {[
-              { title: 'Introduction to Calculus', type: 'Video', duration: '25 min', rating: 4.8, icon: Play, color: 'var(--brand)' },
+              { title: 'Introduction to Astrophysics', type: 'Video', duration: '25 min', rating: 4.8, icon: Play, color: 'var(--brand)' },
               { title: 'Chemistry Lab Safety Quiz', type: 'Quiz', duration: '10 min', rating: 4.6, icon: Zap, color: 'var(--success)' },
-              { title: 'Essay Writing Fundamentals', type: 'PDF', duration: '15 min', rating: 4.7, icon: BookOpen, color: 'var(--warning)' },
-              { title: 'World History Timeline', type: 'Interactive', duration: '20 min', rating: 4.9, icon: Sparkles, color: 'var(--info)' },
+              { title: 'Cell Biology Revision Notes', type: 'PDF', duration: '15 min', rating: 4.7, icon: BookOpen, color: 'var(--warning)' },
+              { title: 'Plate Tectonics Explorer', type: 'Interactive', duration: '20 min', rating: 4.9, icon: Sparkles, color: 'var(--info)' },
             ].map((item, i) => (
               <button
                 key={i}
@@ -188,10 +189,10 @@ export default function HomeDashboard({ onNavigate }: HomeDashboardProps) {
           </div>
           <div className="space-y-3">
             {[
-              { name: 'Algebra Study Group', members: 12, active: 5, subject: 'Math', status: 'Live now' },
+              { name: 'Physics Problem Solvers', members: 12, active: 5, subject: 'Physics', status: 'Live now' },
               { name: 'Biology Lab Partners', members: 8, active: 3, subject: 'Science', status: '3 online' },
-              { name: 'AP History Review', members: 15, active: 7, subject: 'History', status: 'Live now' },
-              { name: 'Creative Writing Club', members: 10, active: 2, subject: 'English', status: '2 online' },
+              { name: 'Chemistry Reaction Review', members: 15, active: 7, subject: 'Chemistry', status: 'Live now' },
+              { name: 'Earth Science Field Notes', members: 10, active: 2, subject: 'Earth Science', status: '2 online' },
             ].map((group, i) => (
               <button
                 key={i}
@@ -240,7 +241,7 @@ export default function HomeDashboard({ onNavigate }: HomeDashboardProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {[
             { title: 'Physics Formulas Cheat Sheet', author: 'Alex M.', type: 'Cheat Sheet', likes: 24, subject: 'Physics' },
-            { title: 'Spanish Vocab Flashcards', author: 'Maria L.', type: 'Flashcards', likes: 18, subject: 'Language' },
+            { title: 'Organic Chemistry Flashcards', author: 'Maria L.', type: 'Flashcards', likes: 18, subject: 'Chemistry' },
             { title: 'How Photosynthesis Works', author: 'Chris K.', type: 'Explainer', likes: 31, subject: 'Biology' },
           ].map((item, i) => (
             <button

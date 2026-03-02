@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     Home, LayoutDashboard, Calendar, BookOpen, Users,
     FolderOpen, Palette, Rocket, ChevronLeft, ChevronRight, X
 } from 'lucide-react';
+import { useLocalStore } from '@/store/useLocalStore';
 
 interface SidebarProps {
     currentPage: string;
@@ -29,6 +30,22 @@ export default function Sidebar({
     sidebarExpanded, setSidebarExpanded, isSignedIn
 }: SidebarProps) {
     const sidebarRef = useRef<HTMLDivElement>(null);
+    const { currentUser } = useLocalStore();
+    const [onboardingComplete, setOnboardingComplete] = useState(false);
+    const displayName = currentUser?.displayName || currentUser?.username || 'Guest';
+    const email = currentUser?.email || 'guest@sciencespire.app';
+    const avatarInitials = displayName
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part[0]?.toUpperCase() ?? '')
+        .join('') || 'G';
+    const onboardingKey = `sciencespire-onboarding-complete-${currentUser.id}`;
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        setOnboardingComplete(localStorage.getItem(onboardingKey) === 'true');
+    }, [onboardingKey, currentPage]);
 
     // Close sidebar on Escape key
     useEffect(() => {
@@ -60,7 +77,7 @@ export default function Sidebar({
         <>
             {/* ====== DESKTOP SIDEBAR ====== */}
             <aside
-                className={`hidden lg:flex flex-col fixed left-0 top-0 bottom-0 z-30 transition-all duration-300 ease-in-out border-r`}
+                className={`hidden lg:flex flex-col fixed left-0 top-0 bottom-0 z-30 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border-r`}
                 style={{
                     width: sidebarExpanded ? 240 : 68,
                     backgroundColor: 'var(--sidebar-bg)',
@@ -118,22 +135,24 @@ export default function Sidebar({
                         );
                     })}
 
-                    <div className="pt-2 mt-2" style={{ borderTop: '1px solid var(--border-light)' }}>
-                        <button
-                            onClick={() => handleNav('onboarding')}
-                            title={!sidebarExpanded ? 'Get Started' : undefined}
-                            className="w-full flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-150 min-h-[44px]"
-                            style={{
-                                padding: sidebarExpanded ? '8px 12px' : '8px',
-                                justifyContent: sidebarExpanded ? 'flex-start' : 'center',
-                                backgroundColor: currentPage === 'onboarding' ? 'var(--brand)' : 'transparent',
-                                color: currentPage === 'onboarding' ? '#FFFFFF' : 'var(--success)',
-                            }}
-                        >
-                            <Rocket size={20} strokeWidth={1.8} className="shrink-0" />
-                            {sidebarExpanded && <span>Get Started</span>}
-                        </button>
-                    </div>
+                    {!onboardingComplete && (
+                        <div className="pt-2 mt-2" style={{ borderTop: '1px solid var(--border-light)' }}>
+                            <button
+                                onClick={() => handleNav('onboarding')}
+                                title={!sidebarExpanded ? 'Get Started' : undefined}
+                                className="w-full flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-150 min-h-[44px]"
+                                style={{
+                                    padding: sidebarExpanded ? '8px 12px' : '8px',
+                                    justifyContent: sidebarExpanded ? 'flex-start' : 'center',
+                                    backgroundColor: currentPage === 'onboarding' ? 'var(--brand)' : 'transparent',
+                                    color: currentPage === 'onboarding' ? '#FFFFFF' : 'var(--success)',
+                                }}
+                            >
+                                <Rocket size={20} strokeWidth={1.8} className="shrink-0" />
+                                {sidebarExpanded && <span>Get Started</span>}
+                            </button>
+                        </div>
+                    )}
                 </nav>
 
                 {/* User section */}
@@ -148,11 +167,11 @@ export default function Sidebar({
                         }}
                     >
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1D4ED8] to-[#3B82F6] flex items-center justify-center text-white text-xs font-bold shrink-0">
-                            JS
+                            {avatarInitials}
                         </div>
                         {sidebarExpanded && (
                             <div className="text-left overflow-hidden">
-                                <div className="font-medium text-sm truncate" style={{ color: 'var(--text)' }}>Jane Smith</div>
+                                <div className="font-medium text-sm truncate" style={{ color: 'var(--text)' }}>{displayName}</div>
                                 <div className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>Student</div>
                             </div>
                         )}
@@ -161,99 +180,106 @@ export default function Sidebar({
             </aside>
 
             {/* ====== MOBILE SLIDE-OUT MENU ====== */}
-            {sidebarOpen && (
-                <div className="lg:hidden fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Navigation menu">
-                    <div
-                        className="absolute inset-0 transition-opacity"
-                        style={{ backgroundColor: 'var(--surface-overlay)' }}
-                        onClick={() => setSidebarOpen(false)}
-                        aria-hidden="true"
-                    />
-                    <div
-                        ref={sidebarRef}
-                        className="absolute left-0 top-0 bottom-0 w-72 shadow-2xl animate-slide-in-left flex flex-col"
-                        style={{
-                            backgroundColor: 'var(--sidebar-bg)',
-                            backdropFilter: 'blur(20px)',
-                            WebkitBackdropFilter: 'blur(20px)',
-                        }}
-                    >
-                        <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
-                            <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'var(--brand)' }}>
-                                    <BookOpen size={16} className="text-white" />
-                                </div>
-                                <span className="text-lg font-bold font-[family-name:var(--font-display)]" style={{ color: 'var(--text)' }}>ScienceSpire</span>
+            <div
+                className={`lg:hidden fixed inset-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Navigation menu"
+            >
+                <div
+                    className={`absolute inset-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${sidebarOpen ? 'opacity-100' : 'opacity-0'}`}
+                    style={{ backgroundColor: 'var(--surface-overlay)' }}
+                    onClick={() => setSidebarOpen(false)}
+                    aria-hidden="true"
+                />
+                <div
+                    ref={sidebarRef}
+                    className={`absolute left-0 top-0 bottom-0 w-72 shadow-2xl flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                    style={{
+                        backgroundColor: 'var(--sidebar-bg)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                    }}
+                >
+                    <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'var(--brand)' }}>
+                                <BookOpen size={16} className="text-white" />
                             </div>
-                            <button
-                                onClick={() => setSidebarOpen(false)}
-                                className="p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                                style={{ color: 'var(--text-secondary)' }}
-                                aria-label="Close menu"
-                            >
-                                <X size={20} />
-                            </button>
+                            <span className="text-lg font-bold font-[family-name:var(--font-display)]" style={{ color: 'var(--text)' }}>ScienceSpire</span>
                         </div>
-
-                        {/* User card */}
-                        <div className="p-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1D4ED8] to-[#3B82F6] flex items-center justify-center text-white text-sm font-bold">
-                                    JS
-                                </div>
-                                <div>
-                                    <div className="font-semibold" style={{ color: 'var(--text)' }}>Jane Smith</div>
-                                    <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>jane@student.edu</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto" aria-label="Mobile navigation">
-                            <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Main</div>
-                            {navItems.map(item => {
-                                const Icon = item.icon;
-                                const active = currentPage === item.id;
-                                return (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => handleNav(item.id)}
-                                        className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium min-h-[44px] transition-all"
-                                        style={{
-                                            backgroundColor: active ? 'var(--brand)' : 'transparent',
-                                            color: active ? '#FFFFFF' : 'var(--text-secondary)',
-                                        }}
-                                    >
-                                        <Icon size={20} />
-                                        {item.label}
-                                    </button>
-                                );
-                            })}
-
-                            <div className="px-3 pt-4 pb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>More</div>
-                            {[
-                                { id: 'onboarding', label: 'Get Started', icon: Rocket },
-                            ].map(item => {
-                                const Icon = item.icon;
-                                const active = currentPage === item.id;
-                                return (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => handleNav(item.id)}
-                                        className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium min-h-[44px] transition-all"
-                                        style={{
-                                            backgroundColor: active ? 'var(--brand)' : 'transparent',
-                                            color: active ? '#FFFFFF' : 'var(--text-secondary)',
-                                        }}
-                                    >
-                                        <Icon size={20} />
-                                        {item.label}
-                                    </button>
-                                );
-                            })}
-                        </nav>
+                        <button
+                            onClick={() => setSidebarOpen(false)}
+                            className="p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                            style={{ color: 'var(--text-secondary)' }}
+                            aria-label="Close menu"
+                        >
+                            <X size={20} />
+                        </button>
                     </div>
+
+                    {/* User card */}
+                    <div className="p-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1D4ED8] to-[#3B82F6] flex items-center justify-center text-white text-sm font-bold">
+                                {avatarInitials}
+                            </div>
+                            <div>
+                                <div className="font-semibold" style={{ color: 'var(--text)' }}>{displayName}</div>
+                                <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>{email}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto" aria-label="Mobile navigation">
+                        <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Main</div>
+                        {navItems.map(item => {
+                            const Icon = item.icon;
+                            const active = currentPage === item.id;
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => handleNav(item.id)}
+                                    className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium min-h-[44px] transition-all"
+                                    style={{
+                                        backgroundColor: active ? 'var(--brand)' : 'transparent',
+                                        color: active ? '#FFFFFF' : 'var(--text-secondary)',
+                                    }}
+                                >
+                                    <Icon size={20} />
+                                    {item.label}
+                                </button>
+                            );
+                        })}
+
+                        {!onboardingComplete && (
+                            <>
+                                <div className="px-3 pt-4 pb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>More</div>
+                                {[
+                                    { id: 'onboarding', label: 'Get Started', icon: Rocket },
+                                ].map(item => {
+                                    const Icon = item.icon;
+                                    const active = currentPage === item.id;
+                                    return (
+                                        <button
+                                            key={item.id}
+                                            onClick={() => handleNav(item.id)}
+                                            className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium min-h-[44px] transition-all"
+                                            style={{
+                                                backgroundColor: active ? 'var(--brand)' : 'transparent',
+                                                color: active ? '#FFFFFF' : 'var(--text-secondary)',
+                                            }}
+                                        >
+                                            <Icon size={20} />
+                                            {item.label}
+                                        </button>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </nav>
                 </div>
-            )}
+            </div>
         </>
     );
 }

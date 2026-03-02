@@ -59,7 +59,7 @@ export default function CreatorStudio() {
     const TemplateIcon = template.icon;
 
     return (
-      <div className="space-y-6">
+      <div className="creator-studio-page space-y-6">
         <button
           onClick={() => { setStep('select'); setSelectedTemplate(null); }}
           className="inline-flex items-center gap-2 text-sm text-[#1D4ED8] font-medium min-h-[44px] underline"
@@ -214,11 +214,10 @@ export default function CreatorStudio() {
                   </label>
                   <select className="w-full px-4 py-3 bg-[#F5F5F7] rounded-xl text-sm border border-transparent focus:border-[#1D4ED8] focus:outline-none min-h-[48px]">
                     <option>Select subject</option>
-                    <option>Math</option>
-                    <option>Science</option>
-                    <option>English</option>
-                    <option>History</option>
                     <option>Physics</option>
+                    <option>Chemistry</option>
+                    <option>Biology</option>
+                    <option>Earth Science</option>
                   </select>
                 </div>
                 <div>
@@ -293,7 +292,7 @@ export default function CreatorStudio() {
                 <p className="text-sm text-[#4B5563] mt-1">Preview of how your resource will appear to other learners</p>
                 <div className="flex items-center justify-center gap-2 mt-3">
                   <span className="px-2 py-0.5 bg-[#1D4ED8]/10 text-[#1D4ED8] rounded text-[10px] font-semibold">{template.title}</span>
-                  <span className="px-2 py-0.5 bg-gray-200 text-[#4B5563] rounded text-[10px] font-medium">Math</span>
+                  <span className="px-2 py-0.5 bg-gray-200 text-[#4B5563] rounded text-[10px] font-medium">Physics</span>
                   <span className="px-2 py-0.5 bg-gray-200 text-[#4B5563] rounded text-[10px] font-medium">Beginner</span>
                 </div>
               </div>
@@ -351,7 +350,7 @@ export default function CreatorStudio() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="creator-studio-page space-y-6">
       <div>
         <h1 className="text-xl lg:text-2xl font-bold text-[#111827]">Creator Studio</h1>
         <p className="text-sm text-[#4B5563] mt-0.5">Create resources to share with your classmates</p>
@@ -392,8 +391,8 @@ export default function CreatorStudio() {
         </h2>
         <div className="space-y-2">
           {[
-            { title: 'Algebra Basics Quiz', type: 'Quiz', date: '3 days ago', views: 24, color: '#059669' },
-            { title: 'Spanish Verbs Flashcards', type: 'Flashcards', date: '1 week ago', views: 18, color: '#1D4ED8' },
+            { title: 'Kinematics Basics Quiz', type: 'Quiz', date: '3 days ago', views: 24, color: '#059669' },
+            { title: 'Organic Chemistry Flashcards', type: 'Flashcards', date: '1 week ago', views: 18, color: '#1D4ED8' },
           ].map((item, i) => (
             <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-[#F5F5F7]/50 hover:bg-[#F5F5F7] transition-colors">
               <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: item.color + '12' }}>

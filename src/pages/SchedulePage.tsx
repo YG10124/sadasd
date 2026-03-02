@@ -20,7 +20,6 @@ export default function SchedulePage({ searchQuery = '', isSignedIn = false, onN
     const [toastMsg, setToastMsg] = useState<string | null>(null);
 
     // Map sessions for display
-    // #region agent log
     const displaySessions = sessions.map(s => ({
         ...s,
         hostInitials: s.host.split(' ').map(w => w[0]).join('').slice(0, 2),
@@ -30,8 +29,6 @@ export default function SchedulePage({ searchQuery = '', isSignedIn = false, onN
         status: s.attendees.length >= s.capacity - 1 ? 'almost-full' : 'upcoming',
         isMySession: s.attendees.includes(currentUser.id),
     }));
-    if (displaySessions.length > 0) fetch('http://127.0.0.1:7805/ingest/412aa953-0d13-4424-9bc9-75257ad8e06f',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'5ab780'},body:JSON.stringify({sessionId:'5ab780',location:'SchedulePage.tsx:24',message:'isMySession check',data:{currentUserId:currentUser.id,firstSessionId:displaySessions[0].id,firstIsMySession:displaySessions[0].isMySession},hypothesisId:'B',timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
 
     const query = searchQuery.trim().toLowerCase();
     const searchFiltered = query
@@ -49,6 +46,10 @@ export default function SchedulePage({ searchQuery = '', isSignedIn = false, onN
     const detailSession = detailSessionId !== null ? displaySessions.find(s => s.id === detailSessionId) : null;
 
     const handleReserve = (sessionId: number) => {
+        if (!isSignedIn) {
+            onNavigate?.('auth');
+            return;
+        }
         reserveSession(sessionId);
         addNotification(`Reserved spot in session #${sessionId}`);
         showToast('Spot reserved successfully!');
@@ -71,10 +72,6 @@ export default function SchedulePage({ searchQuery = '', isSignedIn = false, onN
         const end = parseTo24h(timeParts[1] ?? timeParts[0] ?? '11:00 AM');
         const dtStart = `${dateStr}T${String(start.h).padStart(2, '0')}${String(start.min).padStart(2, '0')}00`;
         const dtEnd = `${dateStr}T${String(end.h).padStart(2, '0')}${String(end.min).padStart(2, '0')}00`;
-        // #region agent log
-        fetch('http://127.0.0.1:7805/ingest/412aa953-0d13-4424-9bc9-75257ad8e06f',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'5ab780'},body:JSON.stringify({sessionId:'5ab780',location:'SchedulePage.tsx:handleAddToCalendar',message:'ICS export',data:{sessionDate:session.date,sessionTime:session.time,dtStart,dtEnd},hypothesisId:'C',timestamp:Date.now()})}).catch(()=>{});
-        // #endregion
-
         const icsContent = [
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
@@ -175,7 +172,7 @@ export default function SchedulePage({ searchQuery = '', isSignedIn = false, onN
                                     style={{ backgroundColor: 'var(--bg)', color: 'var(--text)' }}
                                 >
                                     <option>All</option>
-                                    {label === 'Subject' && <><option>Math</option><option>Science</option><option>English</option><option>History</option></>}
+                                    {label === 'Subject' && <><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Earth Science</option></>}
                                     {label === 'Level' && <><option>Beginner</option><option>Intermediate</option><option>Advanced</option></>}
                                     {label === 'Type' && <><option>Tutoring</option><option>Study Group</option><option>Workshop</option></>}
                                     {label === 'Format' && <><option>Video</option><option>Text-based</option></>}

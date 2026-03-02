@@ -20,9 +20,9 @@ export default function CommunityPage() {
 
     const questions = [
         {
-            id: 1, title: 'How do you solve quadratic equations by completing the square?', subject: 'Math', author: 'Alex M.', authorInitials: 'AM', time: '2 hours ago', replies: 5, solved: true, views: 34, bestAnswer: 'To complete the square: 1) Move the constant to the right side, 2) Take half of b, square it, add to both sides, 3) Factor the left side as a perfect square, 4) Solve by taking square roots.',
+            id: 1, title: 'How do I calculate acceleration from a force diagram?', subject: 'Physics', author: 'Alex M.', authorInitials: 'AM', time: '2 hours ago', replies: 5, solved: true, views: 34, bestAnswer: 'Use F = ma. First find net force from the diagram, then divide by mass to get acceleration.',
             allReplies: [
-                { author: 'Dr. Chen', initials: 'DC', text: 'To complete the square: move the constant, take half of b, square it, add to both sides.', time: '1 hour ago', isBest: true, likes: 8 },
+                { author: 'Dr. Chen', initials: 'DC', text: 'Draw all forces, sum them vectorially for net force, then apply a = F_net / m.', time: '1 hour ago', isBest: true, likes: 8 },
                 { author: 'Maria L.', initials: 'ML', text: 'Dr. Chen\'s explanation is great!', time: '45 min ago', isBest: false, likes: 3 },
             ]
         },
@@ -32,25 +32,25 @@ export default function CommunityPage() {
             ]
         },
         {
-            id: 3, title: 'Tips for writing a strong thesis statement?', subject: 'English', author: 'Jordan R.', authorInitials: 'JR', time: '1 day ago', replies: 3, solved: false, views: 28, bestAnswer: null, allReplies: [
-                { author: 'Emily W.', initials: 'EW', text: 'A strong thesis should be specific, arguable, and provide a roadmap for your essay.', time: '20 hours ago', isBest: false, likes: 5 },
+            id: 3, title: 'Any mnemonic for periodic trends in chemistry?', subject: 'Chemistry', author: 'Jordan R.', authorInitials: 'JR', time: '1 day ago', replies: 3, solved: false, views: 28, bestAnswer: null, allReplies: [
+                { author: 'Emily W.', initials: 'EW', text: 'Remember: electronegativity and ionization energy increase up and to the right.', time: '20 hours ago', isBest: false, likes: 5 },
             ]
         },
         { id: 4, title: 'How to calculate acceleration from a velocity-time graph?', subject: 'Physics', author: 'Kim P.', authorInitials: 'KP', time: '3 days ago', replies: 6, solved: true, views: 89, bestAnswer: 'Acceleration = slope = Δv/Δt', allReplies: [] },
     ];
 
     const channels = [
-        { name: 'general', description: 'General discussion and announcements', members: 234, messages: 1289 },
-        { name: 'math-help', description: 'Get help with math problems', members: 89, messages: 456 },
-        { name: 'science-lab', description: 'Science experiments and lab work', members: 67, messages: 312 },
-        { name: 'study-tips', description: 'Share your best study strategies', members: 156, messages: 678 },
+        { name: 'general', description: 'General science discussion and announcements', members: 234, messages: 1289 },
+        { name: 'physics-help', description: 'Get help with physics problem sets', members: 89, messages: 456 },
+        { name: 'chemistry-lab', description: 'Chemistry experiments and lab work', members: 67, messages: 312 },
+        { name: 'earth-science', description: 'Weather, geology, and climate discussion', members: 156, messages: 678 },
     ];
 
     const groups = [
-        { name: 'Algebra Study Group', members: 12, activity: 'Active now', subject: 'Math', nextMeeting: 'Today, 3 PM' },
-        { name: 'Biology Lab Partners', members: 8, activity: '3 online', subject: 'Science', nextMeeting: 'Tomorrow, 2 PM' },
-        { name: 'AP History Review', members: 15, activity: 'Active now', subject: 'History', nextMeeting: 'Today, 5 PM' },
-        { name: 'Creative Writing Club', members: 10, activity: '2 online', subject: 'English', nextMeeting: 'Friday, 4 PM' },
+        { name: 'Physics Study Group', members: 12, activity: 'Active now', subject: 'Physics', nextMeeting: 'Today, 3 PM' },
+        { name: 'Biology Lab Partners', members: 8, activity: '3 online', subject: 'Biology', nextMeeting: 'Tomorrow, 2 PM' },
+        { name: 'Organic Chemistry Review', members: 15, activity: 'Active now', subject: 'Chemistry', nextMeeting: 'Today, 5 PM' },
+        { name: 'Earth Science Explorers', members: 10, activity: '2 online', subject: 'Earth Science', nextMeeting: 'Friday, 4 PM' },
     ];
 
     // Thread detail view
